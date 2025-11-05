@@ -18,14 +18,14 @@ function Router() {
   return (
     <Switch>
       <Route path="/">
-        <Redirect to="/dashboard/expenses" />
+        <Redirect to="/dashboard/quickbooks/expenses" />
       </Route>
-      <Route path="/dashboard/expenses" component={ExpensesPage} />
-      <Route path="/dashboard/invoices" component={InvoicesPage} />
-      <Route path="/dashboard/payments" component={PaymentsPage} />
-      <Route path="/dashboard/customers" component={CustomersPage} />
-      <Route path="/dashboard/balance-sheet" component={BalanceSheetPage} />
-      <Route path="/dashboard/income-statement" component={IncomeStatementPage} />
+      <Route path="/dashboard/quickbooks/expenses" component={ExpensesPage} />
+      <Route path="/dashboard/quickbooks/invoices" component={InvoicesPage} />
+      <Route path="/dashboard/quickbooks/payments" component={PaymentsPage} />
+      <Route path="/dashboard/quickbooks/customers" component={CustomersPage} />
+      <Route path="/dashboard/quickbooks/balance-sheet" component={BalanceSheetPage} />
+      <Route path="/dashboard/quickbooks/income-statement" component={IncomeStatementPage} />
       <Route component={NotFound} />
     </Switch>
   );

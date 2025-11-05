@@ -101,33 +101,56 @@ const navigationItems = [
 
 const dashboardItems = [
   {
+    title: "Executive",
+    url: "/executive",
+    icon: BarChart3,
+  },
+  {
+    title: "Sales",
+    url: "/sales",
+    icon: ShoppingCart,
+  },
+  {
+    title: "Collections",
+    url: "/collections",
+    icon: CreditCard,
+  },
+  {
+    title: "Operations",
+    url: "/operations",
+    icon: FolderKanban,
+  },
+];
+
+const quickbooksItems = [
+  {
     title: "Gastos",
-    url: "/dashboard/expenses",
+    url: "/dashboard/quickbooks/expenses",
     icon: DollarSign,
   },
   {
     title: "Facturas",
-    url: "/dashboard/invoices",
+    url: "/dashboard/quickbooks/invoices",
     icon: Receipt,
   },
   {
-    title: "Clientes",
-    url: "/dashboard/customers",
-    icon: Users,
-  },
-  {
     title: "Pagos",
-    url: "/dashboard/payments",
+    url: "/dashboard/quickbooks/payments",
     icon: CreditCard,
   },
   {
+    title: "Clientes",
+    url: "/dashboard/quickbooks/customers",
+    icon: Users,
+  },
+  {
     title: "Balance General",
-    url: "/dashboard/balance-sheet",
+    url: "/dashboard/quickbooks/balance-sheet",
     icon: FileBarChart,
   },
   {
     title: "Estado de Resultados",
-    url: "/dashboard/income-statement",
+    url: "/dashboard/quickbooks/income-statement",
     icon: FileText,
   },
 ];
@@ -150,22 +173,21 @@ export function AppSidebar() {
           <SidebarGroupLabel>Navegación</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.slice(0, 4).map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={location === item.url} data-testid={`link-${item.title.toLowerCase()}`}>
-                    <Link href={item.url}>
-                      <item.icon className="w-4 h-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-              <Collapsible defaultOpen={location.startsWith('/dashboard')}>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={location === "/"} data-testid="link-home">
+                  <Link href="/">
+                    <Home className="w-4 h-4" />
+                    <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <Collapsible defaultOpen={location.startsWith('/dashboard') || dashboardItems.some(item => location === item.url)}>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton data-testid="button-dashboard-toggle">
                       <BarChart3 className="w-4 h-4" />
-                      <span>Dashboard</span>
+                      <span>Dashboards</span>
                       <ChevronDown className="ml-auto w-4 h-4" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -173,7 +195,7 @@ export function AppSidebar() {
                     <SidebarMenuSub>
                       {dashboardItems.map((item) => (
                         <SidebarMenuSubItem key={item.title}>
-                          <SidebarMenuSubButton asChild isActive={location === item.url} data-testid={`link-${item.title.toLowerCase().replace(/ /g, '-')}`}>
+                          <SidebarMenuSubButton asChild isActive={location === item.url} data-testid={`link-${item.title.toLowerCase()}`}>
                             <Link href={item.url}>
                               <item.icon className="w-4 h-4" />
                               <span>{item.title}</span>
@@ -181,13 +203,40 @@ export function AppSidebar() {
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
+                      
+                      <Collapsible defaultOpen={location.startsWith('/dashboard/quickbooks')}>
+                        <SidebarMenuSubItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuSubButton data-testid="button-quickbooks-toggle">
+                              <FileBarChart className="w-4 h-4" />
+                              <span>QuickBooks</span>
+                              <ChevronDown className="ml-auto w-4 h-4" />
+                            </SidebarMenuSubButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {quickbooksItems.map((item) => (
+                                <SidebarMenuSubItem key={item.title}>
+                                  <SidebarMenuSubButton asChild isActive={location === item.url} data-testid={`link-qb-${item.title.toLowerCase().replace(/ /g, '-')}`}>
+                                    <Link href={item.url}>
+                                      <item.icon className="w-4 h-4" />
+                                      <span>{item.title}</span>
+                                    </Link>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </SidebarMenuSubItem>
+                      </Collapsible>
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
+              
               {navigationItems.slice(4).map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={location === item.url} data-testid={`link-${item.title.toLowerCase()}`}>
+                  <SidebarMenuButton asChild isActive={location === item.url} data-testid={`link-${item.title.toLowerCase().replace(/ /g, '-')}`}>
                     <Link href={item.url}>
                       <item.icon className="w-4 h-4" />
                       <span>{item.title}</span>
