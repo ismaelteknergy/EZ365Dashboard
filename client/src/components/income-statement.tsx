@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import type { IncomeStatementData, FinancialLineItem } from "@shared/schema";
 
 interface IncomeStatementProps {
@@ -27,7 +28,30 @@ function FinancialLine({ item }: { item: FinancialLineItem }) {
 
 export function IncomeStatement({ data }: IncomeStatementProps) {
   const handleExport = () => {
-    console.log('Exportar Estado de Resultados');
+    const excelData = [];
+    
+    excelData.push(['Estado de Resultados']);
+    excelData.push([data.period]);
+    excelData.push([]);
+    
+    excelData.push(['INGRESOS', '']);
+    data.revenue.forEach(item => {
+      const indent = '  '.repeat(item.level);
+      excelData.push([indent + item.label, item.amount]);
+    });
+    
+    excelData.push([]);
+    excelData.push(['GASTOS', '']);
+    data.expenses.forEach(item => {
+      const indent = '  '.repeat(item.level);
+      excelData.push([indent + item.label, item.amount]);
+    });
+    
+    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Estado de Resultados');
+    
+    XLSX.writeFile(workbook, 'Estado_de_Resultados.xlsx');
   };
 
   return (

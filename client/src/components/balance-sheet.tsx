@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import type { BalanceSheetData, FinancialLineItem } from "@shared/schema";
 
 interface BalanceSheetProps {
@@ -27,7 +28,37 @@ function FinancialLine({ item }: { item: FinancialLineItem }) {
 
 export function BalanceSheet({ data }: BalanceSheetProps) {
   const handleExport = () => {
-    console.log('Exportar Balance General');
+    const excelData = [];
+    
+    excelData.push(['Balance General']);
+    excelData.push([`Al ${data.asOfDate}`]);
+    excelData.push([]);
+    
+    excelData.push(['ACTIVOS', '']);
+    data.assets.forEach(item => {
+      const indent = '  '.repeat(item.level);
+      excelData.push([indent + item.label, item.amount]);
+    });
+    
+    excelData.push([]);
+    excelData.push(['PASIVOS', '']);
+    data.liabilities.forEach(item => {
+      const indent = '  '.repeat(item.level);
+      excelData.push([indent + item.label, item.amount]);
+    });
+    
+    excelData.push([]);
+    excelData.push(['CAPITAL', '']);
+    data.equity.forEach(item => {
+      const indent = '  '.repeat(item.level);
+      excelData.push([indent + item.label, item.amount]);
+    });
+    
+    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Balance General');
+    
+    XLSX.writeFile(workbook, 'Balance_General.xlsx');
   };
 
   return (
